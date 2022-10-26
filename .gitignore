@@ -7,6 +7,10 @@
 *.userosscache
 *.sln.docstates
 
+# Mac Auto-Generated Files and code editor files
+.DS_Store
+.DS_STORE/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

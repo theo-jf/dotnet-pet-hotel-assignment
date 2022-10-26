@@ -3,7 +3,16 @@ using System;
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace pet_hotel
+namespace pet_hotel.Models
 {
-    public class PetOwner {}
+    public class PetOwner {
+
+        // Set Id
+        public int id { get; set; }
+
+        public string ownerName { get; set; }
+
+        public string email { get; set; }
+
+    }
 }
