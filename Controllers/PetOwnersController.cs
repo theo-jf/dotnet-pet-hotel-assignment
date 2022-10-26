@@ -22,5 +22,18 @@ namespace pet_hotel.Controllers
         public IEnumerable<PetOwner> GetPets() {
             return new List<PetOwner>();
         }
+
+        [HttpPost]
+        public IActionResult Post(PetOwner petOwner)
+        {
+            // Ensures no key values are empty
+            if (petOwner.ownerName == null || petOwner.email == null)
+                return BadRequest("Must include a name and email for each pet owner");
+
+            _context.Add(petOwner);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
+        }
     }
 }
