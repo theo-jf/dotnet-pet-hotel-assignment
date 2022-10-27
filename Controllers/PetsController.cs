@@ -51,6 +51,23 @@ namespace pet_hotel.Controllers
         // }
 
 
+    // POST /api/pets
+    // .NET automatically converts our JSON request body
+    // into a `Pet` object. 
+    [HttpPost]
+    public IActionResult Post(Pet pet) 
+    {
+        if (pet.petName == null)
+        return BadRequest("Must include a name for each pet");
+
+        // Tell the DB context about our new bread object
+        _context.Add(pet);
+        // ...and save the bread object to the database
+        _context.SaveChanges();
+
+        // Respond back with the created bread object
+        return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
+    }
 
         // PATCH action
         // Updates pet check-in true / false
