@@ -19,38 +19,20 @@ namespace pet_hotel.Controllers
             _context = context;
         }
 
-        // This is just a stub for GET / to prevent any weird frontend errors that 
-        // occur when the route is missing in this controller
+        // The `[HttpGet]` attribute defines this method as our `GET /api/pets` endpoint
+        // This function returns a `IEnumerable<Pet>` object,
+        // which is .NET's fancy way of saying "A list of pet objects"
         [HttpGet]
-        public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+        public IEnumerable<Pet> GetPets() 
+        {
+            return _context.Pets
+                // Include the `ownedBy` property
+                // which is a list of `Pet` objects
+                // .NET will do a JOIN for us!
+                .Include(pet => pet.ownedBy);
         }
 
-        // [HttpGet]
-        // [Route("test")]
-        // public IEnumerable<Pet> GetPets() {
-        //     PetOwner blaine = new PetOwner{
-        //         name = "Blaine"
-        //     };
-
-        //     Pet newPet1 = new Pet {
-        //         name = "Big Dog",
-        //         petOwner = blaine,
-        //         color = PetColorType.Black,
-        //         breed = PetBreedType.Poodle,
-        //     };
-
-        //     Pet newPet2 = new Pet {
-        //         name = "Little Dog",
-        //         petOwner = blaine,
-        //         color = PetColorType.Golden,
-        //         breed = PetBreedType.Labrador,
-        //     };
-
-        //     return new List<Pet>{ newPet1, newPet2};
-        // }
-
-           // POST /api/pets
+    // POST /api/pets
     // .NET automatically converts our JSON request body
     // into a `Pet` object. 
     [HttpPost]
@@ -59,12 +41,12 @@ namespace pet_hotel.Controllers
         if (pet.petName == null)
         return BadRequest("Must include a name for each pet");
 
-        // Tell the DB context about our new bread object
+        // Tell the DB context about our new pet object
         _context.Add(pet);
-        // ...and save the bread object to the database
+        // ...and save the pet object to the database
         _context.SaveChanges();
 
-        // Respond back with the created bread object
+        // Respond back with the created pet object
         return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
     }
     }
