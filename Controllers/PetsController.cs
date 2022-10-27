@@ -71,5 +71,32 @@ namespace pet_hotel.Controllers
 
             return CreatedAtAction(nameof(changeChecked), new { id = pet.id }, pet);
         }
+
+
+        // [HttpDelete("{id}")]
+        // public void Delete(int id)
+        // {
+        //     // find the pet by id
+        //     Pet pet = _context.Pets.Find(id);
+
+        //     // tell DB that we want to remove this pet
+        //     _context.Pets.Remove(pet);
+
+        //     // save changes to the DB
+        //     _context.SaveChanges();;
+        // }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // find the pet by id
+            Pet pet = _context.Pets.Find(id);
+
+            // tell DB that we want to remove this pet
+            _context.Pets.Remove(pet);
+
+            // save changes to the DB
+            _context.SaveChanges();;
+        }
     }
 }
