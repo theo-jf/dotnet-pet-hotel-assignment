@@ -19,11 +19,17 @@ namespace pet_hotel.Controllers
             _context = context;
         }
 
-        // This is just a stub for GET / to prevent any weird frontend errors that 
-        // occur when the route is missing in this controller
+        // The `[HttpGet]` attribute defines this method as our `GET /api/pets` endpoint
+        // This function returns a `IEnumerable<Pet>` object,
+        // which is .NET's fancy way of saying "A list of pet objects"
         [HttpGet]
-        public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+        public IEnumerable<Pet> GetPets() 
+        {
+            return _context.Pets
+                // Include the `ownedBy` property
+                // which is a list of `Pet` objects
+                // .NET will do a JOIN for us!
+                .Include(pet => pet.ownedBy);
         }
 
         // [HttpGet]
@@ -72,8 +78,6 @@ namespace pet_hotel.Controllers
         // PATCH action
         // Updates pet check-in true / false
         // Then does date time
-
-
         // YOU WILL NEED TO HAVE SEPARATE CHECK IN AND CHECK OUT ROUTESx
         [HttpPatch("{id}")]
         public IActionResult changeChecked(int id)
@@ -83,6 +87,7 @@ namespace pet_hotel.Controllers
             //     return BadRequest();
 
             Pet existingPet = _context.Pets.Find(id);
+
             if(existingPet is null)
                 return NotFound();
 
@@ -95,10 +100,38 @@ namespace pet_hotel.Controllers
             Console.WriteLine(dateTime);
             existingPet.checkedInTime = dateTime;
             Console.WriteLine("TIME STAMP!!: {0}", existingPet.checkedInTime);
-           
 
             _context.Update(existingPet);
             _context.SaveChanges();
+
+            return Ok();
+        }
+
+
+        // [HttpDelete("{id}")]
+        // public void Delete(int id)
+        // {
+        //     // find the pet by id
+        //     Pet pet = _context.Pets.Find(id);
+
+        //     // tell DB that we want to remove this pet
+        //     _context.Pets.Remove(pet);
+
+        //     // save changes to the DB
+        //     _context.SaveChanges();;
+        // }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // find the pet by id
+            Pet pet = _context.Pets.Find(id);
+
+            // tell DB that we want to remove this pet
+            _context.Pets.Remove(pet);
+
+            // save changes to the DB
+            _context.SaveChanges();;
 
             return Ok();
         }
