@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace dotnet_bakery.Migrations
 {
-    public partial class CreatePetTable : Migration
+    public partial class CreateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,7 +32,7 @@ namespace dotnet_bakery.Migrations
                     breed = table.Column<int>(type: "integer", nullable: false),
                     color = table.Column<int>(type: "integer", nullable: false),
                     checkedIn = table.Column<bool>(type: "boolean", nullable: false),
-                    checkedInTime = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: true),
+                    checkedInTime = table.Column<DateTime>(type: "timestamp without time zone", rowVersion: true, nullable: true),
                     ownedById = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

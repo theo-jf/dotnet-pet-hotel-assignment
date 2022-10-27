@@ -32,44 +32,79 @@ namespace pet_hotel.Controllers
                 .Include(pet => pet.ownedBy);
         }
 
-    // POST /api/pets
-    // .NET automatically converts our JSON request body
-    // into a `Pet` object. 
-    [HttpPost]
-    public IActionResult Post(Pet pet) 
-    {
-        if (pet.petName == null)
-        return BadRequest("Must include a name for each pet");
+        // [HttpGet]
+        // [Route("test")]
+        // public IEnumerable<Pet> GetPets() {
+        //     PetOwner blaine = new PetOwner{
+        //         name = "Blaine"
+        //     };
 
-        // Tell the DB context about our new pet object
-        _context.Add(pet);
-        // ...and save the pet object to the database
-        _context.SaveChanges();
+        //     Pet newPet1 = new Pet {
+        //         name = "Big Dog",
+        //         petOwner = blaine,
+        //         color = PetColorType.Black,
+        //         breed = PetBreedType.Poodle,
+        //     };
 
-        // Respond back with the created pet object
-        return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
-    }
+        //     Pet newPet2 = new Pet {
+        //         name = "Little Dog",
+        //         petOwner = blaine,
+        //         color = PetColorType.Golden,
+        //         breed = PetBreedType.Labrador,
+        //     };
+
+        //     return new List<Pet>{ newPet1, newPet2};
+        // }
+
+
+        // POST /api/pets
+        // .NET automatically converts our JSON request body
+        // into a `Pet` object. 
+        [HttpPost]
+        public IActionResult Post(Pet pet) 
+        {
+            if (pet.petName == null)
+                return BadRequest("Must include a name for each pet");
+
+            // Tell the DB context about our new bread object
+            _context.Add(pet);
+            // ...and save the bread object to the database
+            _context.SaveChanges();
+
+            // Respond back with the created bread object
+            return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
+        }
 
         // PATCH action
         // Updates pet check-in true / false
         // Then does date time
+        // YOU WILL NEED TO HAVE SEPARATE CHECK IN AND CHECK OUT ROUTESx
         [HttpPatch("{id}")]
-        public IActionResult changeChecked(int id, Pet pet)
+        public IActionResult changeChecked(int id)
         {
             // Ensure route parameter id and body id are the same
-            if (id != pet.id)
-                return BadRequest();
+            // if (id != pet.id)
+            //     return BadRequest();
 
-            var existingPet = _context.Pets.Find(id);
+            Pet existingPet = _context.Pets.Find(id);
+
             if(existingPet is null)
                 return NotFound();
 
             // Flips checked in status to the opposite result
-            existingPet.checkedIn = !pet.checkedIn;
+            existingPet.checkedIn = !existingPet.checkedIn;
+            
+            
+            // Create a check in time
+            var dateTime = DateTime.Now;
+            Console.WriteLine(dateTime);
+            existingPet.checkedInTime = dateTime;
+            Console.WriteLine("TIME STAMP!!: {0}", existingPet.checkedInTime);
+
             _context.Update(existingPet);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(changeChecked), new { id = pet.id }, pet);
+            return Ok();
         }
 
 
@@ -97,6 +132,8 @@ namespace pet_hotel.Controllers
 
             // save changes to the DB
             _context.SaveChanges();;
+
+            return Ok();
         }
     }
 }

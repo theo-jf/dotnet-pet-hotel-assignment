@@ -32,10 +32,8 @@ namespace dotnet_bakery.Migrations
                     b.Property<bool>("checkedIn")
                         .HasColumnType("boolean");
 
-                    b.Property<byte[]>("checkedInTime")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                    b.Property<DateTime?>("checkedInTime")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("color")
                         .HasColumnType("integer");
