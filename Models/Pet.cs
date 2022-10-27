@@ -37,8 +37,7 @@ namespace pet_hotel.Models
 
         public bool checkedIn { get; set; }
 
-        [Timestamp]
-        public Byte[] checkedInTime { get; set; }
+        public DateTime? checkedInTime { get; set; }
 
         [ForeignKey("ownedBy")]
         public int ownedById { get; set; }
