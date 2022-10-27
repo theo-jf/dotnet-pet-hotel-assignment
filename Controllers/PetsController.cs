@@ -122,7 +122,7 @@ namespace pet_hotel.Controllers
         // }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             // find the pet by id
             Pet pet = _context.Pets.Find(id);
