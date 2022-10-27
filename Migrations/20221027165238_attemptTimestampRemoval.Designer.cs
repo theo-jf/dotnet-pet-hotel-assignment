@@ -10,8 +10,8 @@ using pet_hotel.Models;
 namespace dotnet_bakery.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221026204508_CreatePetOwnerTable")]
-    partial class CreatePetOwnerTable
+    [Migration("20221027165238_attemptTimestampRemoval")]
+    partial class attemptTimestampRemoval
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,10 +34,8 @@ namespace dotnet_bakery.Migrations
                     b.Property<bool>("checkedIn")
                         .HasColumnType("boolean");
 
-                    b.Property<byte[]>("checkedInTime")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                    b.Property<DateTime?>("checkedInTime")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("color")
                         .HasColumnType("integer");
