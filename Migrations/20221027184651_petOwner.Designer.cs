@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pet_hotel.Models;
@@ -9,9 +10,10 @@ using pet_hotel.Models;
 namespace dotnet_bakery.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221027184651_petOwner")]
+    partial class petOwner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,16 +34,19 @@ namespace dotnet_bakery.Migrations
                     b.Property<bool>("checkedIn")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("checkedInAt")
+                    b.Property<DateTime?>("checkedInTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("color")
                         .HasColumnType("integer");
 
-                    b.Property<string>("name")
+                    b.Property<int>("ownedById")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("petName")
                         .HasColumnType("text");
 
-                    b.Property<int>("petOwnerid")
+                    b.Property<int?>("petOwnerid")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
@@ -58,7 +63,7 @@ namespace dotnet_bakery.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("emailAddress")
+                    b.Property<string>("email")
                         .HasColumnType("text");
 
                     b.Property<string>("name")
@@ -73,9 +78,7 @@ namespace dotnet_bakery.Migrations
                 {
                     b.HasOne("pet_hotel.Models.PetOwner", "petOwner")
                         .WithMany()
-                        .HasForeignKey("petOwnerid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("petOwnerid");
 
                     b.Navigation("petOwner");
                 });

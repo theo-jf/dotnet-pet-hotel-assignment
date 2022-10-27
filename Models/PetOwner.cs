@@ -10,9 +10,9 @@ namespace pet_hotel.Models
         // Set Id
         public int id { get; set; }
 
-        public string ownerName { get; set; }
+        public string name { get; set; }
 
-        public string email { get; set; }
+        public string emailAddress { get; set; }
 
     }
 }

@@ -29,7 +29,7 @@ namespace pet_hotel.Controllers
                 // Include the `ownedBy` property
                 // which is a list of `Pet` objects
                 // .NET will do a JOIN for us!
-                .Include(pet => pet.ownedBy);
+                .Include(pet => pet.petOwner);
         }
 
         // [HttpGet]
@@ -63,11 +63,15 @@ namespace pet_hotel.Controllers
         [HttpPost]
         public IActionResult Post(Pet pet) 
         {
-            if (pet.petName == null)
+            if (pet.name == null)
                 return BadRequest("Must include a name for each pet");
+
+            Console.WriteLine("*********** {0} *************", pet.petOwnerid);
+            Console.WriteLine("****** {0} ********", pet.name);
 
             // Tell the DB context about our new bread object
             _context.Add(pet);
+
             // ...and save the bread object to the database
             _context.SaveChanges();
 
@@ -79,8 +83,8 @@ namespace pet_hotel.Controllers
         // Updates pet check-in true / false
         // Then does date time
         // YOU WILL NEED TO HAVE SEPARATE CHECK IN AND CHECK OUT ROUTESx
-        [HttpPatch("{id}")]
-        public IActionResult changeChecked(int id)
+        [HttpPut("{id}/checkin")]
+        public IActionResult changeCheckedIn(int id)
         {
             // Ensure route parameter id and body id are the same
             // if (id != pet.id)
@@ -92,20 +96,40 @@ namespace pet_hotel.Controllers
                 return NotFound();
 
             // Flips checked in status to the opposite result
-            existingPet.checkedIn = !existingPet.checkedIn;
+            existingPet.checkedIn = true;
             
             
             // Create a check in time
             var dateTime = DateTime.Now;
             Console.WriteLine(dateTime);
-            existingPet.checkedInTime = dateTime;
-            Console.WriteLine("TIME STAMP!!: {0}", existingPet.checkedInTime);
+            existingPet.checkedInAt = dateTime;
+            Console.WriteLine("TIME STAMP!!: {0}", existingPet.checkedInAt);
 
             _context.Update(existingPet);
             _context.SaveChanges();
 
             return Ok();
         }
+
+        [HttpPut("{id}/checkout")]
+        public IActionResult changeCheckedOut(int id)
+        {
+            Pet existingPet = _context.Pets.Find(id);
+
+            if(existingPet is null)
+                return NotFound();
+
+            // Flips checked in status to the opposite result
+            existingPet.checkedIn = false;
+
+            existingPet.checkedInAt = null;
+
+            _context.Update(existingPet);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
 
 
         // [HttpDelete("{id}")]
