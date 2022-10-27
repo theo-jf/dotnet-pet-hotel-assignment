@@ -49,5 +49,29 @@ namespace pet_hotel.Controllers
 
         //     return new List<Pet>{ newPet1, newPet2};
         // }
+
+
+
+        // PATCH action
+        // Updates pet check-in true / false
+        // Then does date time
+        [HttpPatch("{id}")]
+        public IActionResult changeChecked(int id, Pet pet)
+        {
+            // Ensure route parameter id and body id are the same
+            if (id != pet.id)
+                return BadRequest();
+
+            var existingPet = _context.Pets.Find(id);
+            if(existingPet is null)
+                return NotFound();
+
+            // Flips checked in status to the opposite result
+            existingPet.checkedIn = !pet.checkedIn;
+            _context.Update(existingPet);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(changeChecked), new { id = pet.id }, pet);
+        }
     }
 }
