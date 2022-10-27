@@ -42,7 +42,7 @@ namespace pet_hotel.Models
         [ForeignKey("ownedBy")]
         public int ownedById { get; set; }
 
-        public PetOwner ownedBy { get; set; }
+        public PetOwner petOwner { get; set; }
 
     }
 }
