@@ -27,7 +27,7 @@ namespace pet_hotel.Models
     public class Pet {
         public int id { get; set; }
 
-        public string petName { get; set; }
+        public string name { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public PetBreedType breed { get; set; }
@@ -37,11 +37,10 @@ namespace pet_hotel.Models
 
         public bool checkedIn { get; set; }
 
-        public DateTime? checkedInTime { get; set; }
+        public DateTime? checkedInAt { get; set; }
 
-        [ForeignKey("ownedBy")]
-        public int ownedById { get; set; }
-
+        [ForeignKey("petOwner")]
+        public int petOwnerid { get; set; }
         public PetOwner petOwner { get; set; }
 
     }

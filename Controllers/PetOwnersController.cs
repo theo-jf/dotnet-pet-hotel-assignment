@@ -27,7 +27,7 @@ namespace pet_hotel.Controllers
         public IActionResult Post(PetOwner petOwner)
         {
             // Ensures no key values are empty
-            if (petOwner.name == null || petOwner.email == null)
+            if (petOwner.name == null || petOwner.emailAddress == null)
                 return BadRequest("Must include a name and email for each pet owner");
 
             _context.Add(petOwner);
