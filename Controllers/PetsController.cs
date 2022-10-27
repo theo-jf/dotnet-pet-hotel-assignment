@@ -50,7 +50,8 @@ namespace pet_hotel.Controllers
         //     return new List<Pet>{ newPet1, newPet2};
         // }
 
-           // POST /api/pets
+
+    // POST /api/pets
     // .NET automatically converts our JSON request body
     // into a `Pet` object. 
     [HttpPost]
@@ -67,5 +68,27 @@ namespace pet_hotel.Controllers
         // Respond back with the created bread object
         return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
     }
+
+        // PATCH action
+        // Updates pet check-in true / false
+        // Then does date time
+        [HttpPatch("{id}")]
+        public IActionResult changeChecked(int id, Pet pet)
+        {
+            // Ensure route parameter id and body id are the same
+            if (id != pet.id)
+                return BadRequest();
+
+            var existingPet = _context.Pets.Find(id);
+            if(existingPet is null)
+                return NotFound();
+
+            // Flips checked in status to the opposite result
+            existingPet.checkedIn = !pet.checkedIn;
+            _context.Update(existingPet);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(changeChecked), new { id = pet.id }, pet);
+        }
     }
 }
