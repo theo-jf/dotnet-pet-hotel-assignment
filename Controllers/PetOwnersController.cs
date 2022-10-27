@@ -35,5 +35,19 @@ namespace pet_hotel.Controllers
 
             return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
         }
+
+        // Delete route - delete our pet owner by :id
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // find the PetOwners, by ID
+            PetOwner petOwner = _context.PetOwners.Find(id);
+
+            // Tell the DB that we want to remove this PetOwner
+            _context.PetOwners.Remove(petOwner);
+
+            // ...and save the changes to the database
+            _context.SaveChanges();;
+        }
     }
 }
