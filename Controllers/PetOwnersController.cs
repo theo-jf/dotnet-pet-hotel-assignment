@@ -23,6 +23,17 @@ namespace pet_hotel.Controllers
             return _context.PetOwners;
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<PetOwner> Get(int id)
+    {
+        PetOwner petOwner = _context.PetOwners.Find(id);
+
+        if(petOwner == null)
+            return NotFound();
+
+        return Ok(petOwner);
+    }
+
         [HttpPost]
         public IActionResult Post(PetOwner petOwner)
         {
@@ -36,9 +47,31 @@ namespace pet_hotel.Controllers
             return CreatedAtAction(nameof(Post), new { id = petOwner.id }, petOwner);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult basicUpdate(int id, PetOwner petOwner)
+        {
+            if (id != petOwner.id)
+                return BadRequest();
+
+            // This version of a PUT works without needing to remove the original entry
+            // If you were to comment back in the text below,
+            // You would need to use .Remove
+                // PetOwner existingPetOwner = _context.PetOwners.Find(id);
+
+                // if(existingPetOwner is null)
+                //     return NotFound();
+
+                // _context.PetOwners.Remove(existingPetOwner);    
+
+            _context.Update(petOwner);
+            _context.SaveChanges();
+
+            return Ok(petOwner);
+        }
+
         // Delete route - delete our pet owner by :id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             // find the PetOwners, by ID
             PetOwner petOwner = _context.PetOwners.Find(id);
@@ -47,7 +80,9 @@ namespace pet_hotel.Controllers
             _context.PetOwners.Remove(petOwner);
 
             // ...and save the changes to the database
-            _context.SaveChanges();;
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
 }
