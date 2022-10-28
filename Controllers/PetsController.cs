@@ -180,6 +180,12 @@ namespace pet_hotel.Controllers
             // tell DB that we want to remove this pet
             _context.Pets.Remove(pet);
 
+            // Find the owner of this pet from the petOwners table
+            PetOwner owner = _context.PetOwners.Find(pet.petOwnerid);
+
+            // Update the owner's pet count!
+            owner.petCount -= 1;
+
             // save changes to the DB
             _context.SaveChanges();;
 
