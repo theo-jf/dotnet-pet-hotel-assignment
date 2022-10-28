@@ -69,17 +69,43 @@ namespace pet_hotel.Controllers
             Console.WriteLine("*********** {0} *************", pet.petOwnerid);
             Console.WriteLine("****** {0} ********", pet.name);
 
-            // Tell the DB context about our new bread object
+            // Tell the DB context about our new pet object
             _context.Add(pet);
 
-            // ...and save the bread object to the database
+            // Find the owner of this pet from the petOwners table
+            PetOwner owner = _context.PetOwners.Find(pet.petOwnerid);
+
+            // Update the owner's pet count!
+            owner.petCount += 1;
+
+            // ...and save the pet object to the database
             _context.SaveChanges();
 
             // Respond back with the created bread object
             return CreatedAtAction(nameof(Post), new { id = pet.id }, pet);
         }
 
-        // PATCH action
+        [HttpPut("{id}")]
+        public IActionResult basicUpdate(int id, Pet pet)
+        {
+            if (id != pet.id)
+                return BadRequest();
+
+            Pet existingPet = _context.Pets.Find(id);
+
+            if(existingPet is null)
+                return NotFound();
+
+            _context.Pets.Remove(existingPet);    
+
+            _context.Update(pet);
+            _context.SaveChanges();
+
+            return Ok(pet);
+        }
+
+
+        // PUT action
         // Updates pet check-in true / false
         // Then does date time
         // YOU WILL NEED TO HAVE SEPARATE CHECK IN AND CHECK OUT ROUTESx
@@ -108,7 +134,7 @@ namespace pet_hotel.Controllers
             _context.Update(existingPet);
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(existingPet);
         }
 
         [HttpPut("{id}/checkout")]
@@ -127,7 +153,7 @@ namespace pet_hotel.Controllers
             _context.Update(existingPet);
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(existingPet);
         }
 
 
@@ -157,7 +183,7 @@ namespace pet_hotel.Controllers
             // save changes to the DB
             _context.SaveChanges();;
 
-            return Ok();
+            return NoContent();
         }
     }
 }

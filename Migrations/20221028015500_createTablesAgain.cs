@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace dotnet_bakery.Migrations
 {
-    public partial class CreateTables : Migration
+    public partial class createTablesAgain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,9 @@ namespace dotnet_bakery.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ownerName = table.Column<string>(type: "text", nullable: true),
-                    email = table.Column<string>(type: "text", nullable: true)
+                    name = table.Column<string>(type: "text", nullable: true),
+                    emailAddress = table.Column<string>(type: "text", nullable: true),
+                    petCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,28 +29,28 @@ namespace dotnet_bakery.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    petName = table.Column<string>(type: "text", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: true),
                     breed = table.Column<int>(type: "integer", nullable: false),
                     color = table.Column<int>(type: "integer", nullable: false),
                     checkedIn = table.Column<bool>(type: "boolean", nullable: false),
-                    checkedInTime = table.Column<DateTime>(type: "timestamp without time zone", rowVersion: true, nullable: true),
-                    ownedById = table.Column<int>(type: "integer", nullable: false)
+                    checkedInAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    petOwnerid = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Pets_PetOwners_ownedById",
-                        column: x => x.ownedById,
+                        name: "FK_Pets_PetOwners_petOwnerid",
+                        column: x => x.petOwnerid,
                         principalTable: "PetOwners",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_ownedById",
+                name: "IX_Pets_petOwnerid",
                 table: "Pets",
-                column: "ownedById");
+                column: "petOwnerid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

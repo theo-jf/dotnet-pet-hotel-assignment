@@ -14,5 +14,8 @@ namespace pet_hotel.Models
 
         public string emailAddress { get; set; }
 
+        // Ints automatically default to 0!
+        public int petCount { get; set; }
+
     }
 }

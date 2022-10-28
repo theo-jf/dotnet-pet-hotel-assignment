@@ -64,6 +64,9 @@ namespace dotnet_bakery.Migrations
                     b.Property<string>("name")
                         .HasColumnType("text");
 
+                    b.Property<int>("petCount")
+                        .HasColumnType("integer");
+
                     b.HasKey("id");
 
                     b.ToTable("PetOwners");
